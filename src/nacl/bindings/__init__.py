@@ -29,6 +29,8 @@ from nacl.bindings.crypto_generichash import (
     crypto_generichash_STATEBYTES,
     generichash_blake2b_final as crypto_generichash_blake2b_final,
     generichash_blake2b_init as crypto_generichash_blake2b_init,
+    generichash_blake2b_salt_personal as
+    crypto_generichash_blake2b_salt_personal,
     generichash_blake2b_state_copy as crypto_generichash_blake2b_state_copy,
     generichash_blake2b_update as crypto_generichash_blake2b_update
 )
@@ -85,6 +87,7 @@ __all__ = [
     "crypto_generichash_SALTBYTES",
     "crypto_generichash_PERSONALBYTES",
     "crypto_generichash_STATEBYTES",
+    "crypto_generichash_blake2b_salt_personal",
     "crypto_generichash_blake2b_init",
     "crypto_generichash_blake2b_update",
     "crypto_generichash_blake2b_final",

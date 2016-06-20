@@ -27,11 +27,13 @@ crypto_generichash_PERSONALBYTES = \
     lib.crypto_generichash_blake2b_personalbytes()
 crypto_generichash_STATEBYTES = lib.crypto_generichash_statebytes()
 
+
 def _pad_or_truncate(srn, size):
     if len(srn) < size:
-        return srn + size*b'\0'
+        return srn + size * b'\0'
     else:
         return srn[:size]
+
 
 def generichash_blake2b_salt_personal(data,
                                       digest_size=crypto_generichash_BYTES,
