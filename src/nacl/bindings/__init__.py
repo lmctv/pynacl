@@ -38,6 +38,13 @@ from nacl.bindings.crypto_hash import (
     crypto_hash, crypto_hash_BYTES, crypto_hash_sha256,
     crypto_hash_sha256_BYTES, crypto_hash_sha512, crypto_hash_sha512_BYTES,
 )
+from nacl.bindings.crypto_kdf import (
+    BYTES_MAX as crypto_kdf_blake2b_BYTES_MAX,
+    BYTES_MIN as crypto_kdf_blake2b_BYTES_MIN,
+    CONTEXTBYTES as crypto_kdf_blake2b_CONTEXTBYTES,
+    KEYBYTES as crypto_kdf_blake2b_KEYBYTES,
+    crypto_kdf_blake2b_derive_from_key,
+)
 from nacl.bindings.crypto_pwhash import (
     crypto_pwhash_scryptsalsa208sha256_MEMLIMIT_INTERACTIVE,
     crypto_pwhash_scryptsalsa208sha256_MEMLIMIT_SENSITIVE,
@@ -98,6 +105,12 @@ __all__ = [
     "crypto_hash",
     "crypto_hash_sha256",
     "crypto_hash_sha512",
+
+    "crypto_kdf_blake2b_BYTES_MAX",
+    "crypto_kdf_blake2b_BYTES_MIN",
+    "crypto_kdf_blake2b_CONTEXTBYTES",
+    "crypto_kdf_blake2b_KEYBYTES",
+    "crypto_kdf_blake2b_derive_from_key",
 
     "crypto_generichash_BYTES",
     "crypto_generichash_BYTES_MIN",
