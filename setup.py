@@ -38,7 +38,7 @@ except ImportError:
 
 
 requirements = ["six"]
-setup_requirements = []
+setup_requirements = ["pytest-runner"]
 test_requirements = ["pytest>=3.2.1",
                      "hypothesis>=3.27.0"]
 
