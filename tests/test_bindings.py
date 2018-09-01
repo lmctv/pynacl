@@ -1,4 +1,4 @@
-# Copyright 2013 Donald Stufft and individual contributors
+# Copyright 2013-2018 Donald Stufft and individual contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -370,3 +370,39 @@ def test_sodium_add():
 
     with pytest.raises(TypeError):
         res = c.sodium_add(short_one, two)
+
+
+def test_ed25519_is_valid_point():
+    zero = c.crypto_core_ed25519_BYTES * b'\x00'
+    res = c.crypto_core_ed25519_is_valid_point(zero)
+    assert res is False
+
+
+def test_ed25519_from_uniform():
+    _u = c.crypto_core_ed25519_UNIFORMBYTES * b'\x01'
+    point = c.crypto_core_ed25519_from_uniform(_u)
+
+    res = c.crypto_core_ed25519_is_valid_point(point)
+
+    assert res is True
+
+
+def test_ed25519_add_and_sub():
+    _u1 = c.crypto_core_ed25519_UNIFORMBYTES * b'\x01'
+    _u2 = c.crypto_core_ed25519_UNIFORMBYTES * b'\x01'
+    p1 = c.crypto_core_ed25519_from_uniform(_u1)
+    p2 = c.crypto_core_ed25519_from_uniform(_u2)
+
+    p3 = c.crypto_core_ed25519_add(p1, p2)
+
+    assert c.crypto_core_ed25519_is_valid_point(p3) is True
+    assert c.crypto_core_ed25519_sub(p3, p1) == p2
+    assert c.crypto_core_ed25519_sub(p3, p2) == p1
+
+
+def test_scalarmult_ed25519():
+    pass
+
+
+def test_scalarmult_ed25519_base():
+    pass
