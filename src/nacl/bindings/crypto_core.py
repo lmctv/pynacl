@@ -1,4 +1,4 @@
-# Copyright 2013 Donald Stufft and individual contributors
+# Copyright 2018 Donald Stufft and individual contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -25,18 +25,42 @@ crypto_core_ed25519_UNIFORMBYTES = lib.crypto_core_ed25519_uniformbytes()
 
 def crypto_core_ed25519_is_valid_point(p):
     """
-    Checks if ``p`` represents a point on the edwards25519 curve, in canonical
+    Check if ``p`` represents a point on the edwards25519 curve, in canonical
     form, on the main subgroup, and that the point doesn't have a small order.
+
+    :param p: a :py:data:`.crypto_core_ed25519_BYTES` long bytes sequence
+              representing a point on the edwards25519 curve
+    :type p: bytes
+    :return: point validity
+    :rtype: bool
+
     """
+    ensure(isinstance(p, bytes) and len(p) == crypto_core_ed25519_BYTES,
+           'Point must be a crypto_core_ed25519_BYTES long bytes sequence',
+           raising=exc.TypeError)
+
     rc = lib.crypto_core_ed25519_is_valid_point(p)
     return rc == 1
 
 
 def crypto_core_ed25519_from_uniform(r):
     """
-    Maps a 32 bytes vector (usually the output of a hash function) to a point
+    Map a 32 bytes vector (usually the output of a hash function) to a point
     on the edwards25519 curve in compressed representation.
+
+    :param r: a :py:data:`.crypto_core_ed25519_UNIFORMBYTES` long
+              bytes sequence
+    :type r: bytes
+    :return: a point on the edwards25519 curve represented as
+             a :py:data:`.crypto_core_ed25519_BYTES` long bytes sequence
+    :rtype: bytes
     """
+    ensure(isinstance(r, bytes) and
+           len(r) == crypto_core_ed25519_UNIFORMBYTES,
+           'Input must be a {} long bytes sequence'.format(
+           'crypto_core_ed25519_UNIFORMBYTES'),
+           raising=exc.TypeError)
+
     p = ffi.new("unsigned char[]", crypto_core_ed25519_BYTES)
 
     rc = lib.crypto_core_ed25519_from_uniform(p, r)
@@ -49,8 +73,25 @@ def crypto_core_ed25519_from_uniform(r):
 
 def crypto_core_ed25519_add(p, q):
     """
-    Adds two points on the edwards25519 curve.
+    Add two points on the edwards25519 curve.
+
+    :param p: a :py:data:`.crypto_core_ed25519_BYTES` long bytes sequence
+              representing a point on the edwards25519 curve
+    :type p: bytes
+    :param q: a :py:data:`.crypto_core_ed25519_BYTES` long bytes sequence
+              representing a point on the edwards25519 curve
+    :type q: bytes
+    :return: a point on the edwards25519 curve represented as
+             a :py:data:`.crypto_core_ed25519_BYTES` long bytes sequence
+    :rtype: bytes
     """
+    ensure(isinstance(p, bytes) and isinstance(q, bytes) and
+           len(p) == crypto_core_ed25519_BYTES and
+           len(q) == crypto_core_ed25519_BYTES,
+           'Each point must be a {} long bytes sequence'.format(
+           'crypto_core_ed25519_BYTES'),
+           raising=exc.TypeError)
+
     r = ffi.new("unsigned char[]", crypto_core_ed25519_BYTES)
 
     rc = lib.crypto_core_ed25519_add(r, p, q)
@@ -63,8 +104,25 @@ def crypto_core_ed25519_add(p, q):
 
 def crypto_core_ed25519_sub(p, q):
     """
-    Adds two points on the edwards25519 curve.
+    Subtract a point from another on the edwards25519 curve.
+
+    :param p: a :py:data:`.crypto_core_ed25519_BYTES` long bytes sequence
+              representing a point on the edwards25519 curve
+    :type p: bytes
+    :param q: a :py:data:`.crypto_core_ed25519_BYTES` long bytes sequence
+              representing a point on the edwards25519 curve
+    :type q: bytes
+    :return: a point on the edwards25519 curve represented as
+             a :py:data:`.crypto_core_ed25519_BYTES` long bytes sequence
+    :rtype: bytes
     """
+    ensure(isinstance(p, bytes) and isinstance(q, bytes) and
+           len(p) == crypto_core_ed25519_BYTES and
+           len(q) == crypto_core_ed25519_BYTES,
+           'Each point must be a {} long bytes sequence'.format(
+           'crypto_core_ed25519_BYTES'),
+           raising=exc.TypeError)
+
     r = ffi.new("unsigned char[]", crypto_core_ed25519_BYTES)
 
     rc = lib.crypto_core_ed25519_sub(r, p, q)
