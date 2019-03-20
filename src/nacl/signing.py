@@ -1,4 +1,4 @@
-# Copyright 2013 Donald Stufft and individual contributors
+# Copyright 2013-2019 Donald Stufft and individual contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,12 +14,14 @@
 
 from __future__ import absolute_import, division, print_function
 
+from warnings import warn
+
 import nacl.bindings
 from nacl import encoding
 from nacl import exceptions as exc
 from nacl.public import (PrivateKey as _Curve25519_PrivateKey,
                          PublicKey as _Curve25519_PublicKey)
-from nacl.utils import StringFixer, random
+from nacl.utils import PyNaclDeprecated, StringFixer, random
 
 
 class SignedMessage(bytes):
@@ -29,25 +31,48 @@ class SignedMessage(bytes):
     """
 
     @classmethod
-    def _from_parts(cls, signature, message, combined):
+    def _from_parts(cls, signature, message, combined, encoder):
         obj = cls(combined)
+        obj._encoder = encoder
         obj._signature = signature
         obj._message = message
         return obj
 
     @property
-    def signature(self):
+    def raw_signature(self):
         """
         The signature contained within the :class:`SignedMessage`.
         """
         return self._signature
 
     @property
-    def message(self):
+    def raw_message(self):
         """
         The message contained within the :class:`SignedMessage`.
         """
         return self._message
+
+    @property
+    def signature(self):
+        """
+        The signature contained within the :class:`SignedMessage`,
+        encoded as requested on signature generation
+        """
+        warn("Access to the encoded attribute `.signature "
+             "is deprecated. Use `.raw_signature instead",
+             PyNaclDeprecated)
+        return self._encoder.encode(self._signature)
+
+    @property
+    def message(self):
+        """
+        The message contained within the :class:`SignedMessage`.
+        encoded as requested on signature generation
+        """
+        warn("Access to the encoded attribute `.message "
+             "is deprecated. Use `.raw_message instead",
+             PyNaclDeprecated)
+        return self._encoder.encode(self._message)
 
 
 class VerifyKey(encoding.Encodable, StringFixer, object):
@@ -101,13 +126,18 @@ class VerifyKey(encoding.Encodable, StringFixer, object):
             signature.
         :rtype: :class:`bytes`
         """
+
+        # Decode the signed message
+        smessage = encoder.decode(smessage)
+
         if signature is not None:
-            # If we were given the message and signature separately, combine
-            #   them.
-            smessage = signature + encoder.decode(smessage)
-        else:
-            # Decode the signed message
-            smessage = encoder.decode(smessage)
+            if len(signature) == nacl.bindings.crypto_sign_BYTES:
+                smessage = signature + smessage
+            else:
+                warn("Passing in encoded detached signatures is deprecated. "
+                     "Use raw bytes representation instead",
+                     PyNaclDeprecated)
+                smessage = encoder.decode(signature) + smessage
 
         return nacl.bindings.crypto_sign_open(smessage, self._key)
 
@@ -198,11 +228,11 @@ class SigningKey(encoding.Encodable, StringFixer, object):
         raw_signed = nacl.bindings.crypto_sign(message, self._signing_key)
 
         crypto_sign_BYTES = nacl.bindings.crypto_sign_BYTES
-        signature = encoder.encode(raw_signed[:crypto_sign_BYTES])
-        message = encoder.encode(raw_signed[crypto_sign_BYTES:])
+        signature = raw_signed[:crypto_sign_BYTES]
+        message = raw_signed[crypto_sign_BYTES:]
         signed = encoder.encode(raw_signed)
 
-        return SignedMessage._from_parts(signature, message, signed)
+        return SignedMessage._from_parts(signature, message, signed, encoder)
 
     def to_curve25519_private_key(self):
         """

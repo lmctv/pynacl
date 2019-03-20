@@ -1,4 +1,4 @@
-# Copyright 2013 Donald Stufft and individual contributors
+# Copyright 2013-2019 Donald Stufft and individual contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -21,9 +21,10 @@ import pytest
 from utils import assert_equal, assert_not_equal, read_crypto_test_vectors
 
 from nacl.bindings import crypto_sign_PUBLICKEYBYTES, crypto_sign_SEEDBYTES
-from nacl.encoding import Base64Encoder, HexEncoder
+from nacl.encoding import HexEncoder
 from nacl.exceptions import BadSignatureError
 from nacl.signing import SignedMessage, SigningKey, VerifyKey
+from nacl.utils import PyNaclDeprecated
 
 
 def tohex(b):
@@ -99,9 +100,11 @@ class TestSigningKey:
             encoder=HexEncoder,
         )
 
+        assert message == binascii.hexlify(signed.raw_message)
         assert signed == expected
-        assert signed.message == message
-        assert signed.signature == signature
+        with pytest.warns(PyNaclDeprecated):
+            assert signed.message == message
+            assert signed.signature == signature
 
 
 class TestVerifyKey:
@@ -148,15 +151,15 @@ class TestVerifyKey:
         assert binascii.hexlify(
             key.verify(signed, encoder=HexEncoder),
         ) == message
-        assert binascii.hexlify(
-            key.verify(message, HexEncoder.decode(signature),
-                       encoder=HexEncoder),
-        ) == message
+        with pytest.warns(PyNaclDeprecated):
+            assert binascii.hexlify(
+                key.verify(message, signature, encoder=HexEncoder),
+            ) == message
 
     def test_invalid_signed_message(self):
         skey = SigningKey.generate()
         smessage = skey.sign(b"A Test Message!")
-        signature, message = smessage.signature, b"A Forged Test Message!"
+        signature, message = smessage.raw_signature, b"A Forged Test Message!"
 
         # Small sanity check
         assert skey.verify_key.verify(smessage)
@@ -167,38 +170,6 @@ class TestVerifyKey:
         with pytest.raises(BadSignatureError):
             forged = SignedMessage(signature + message)
             skey.verify_key.verify(forged)
-
-    def test_base64_smessage_with_detached_sig_matches_with_attached_sig(self):
-        sk = SigningKey.generate()
-        vk = sk.verify_key
-
-        smsg = sk.sign(b"Hello World in base64", encoder=Base64Encoder)
-
-        msg = smsg.message
-        b64sig = smsg.signature
-
-        sig = Base64Encoder.decode(b64sig)
-
-        assert vk.verify(msg, sig, encoder=Base64Encoder) == \
-            vk.verify(smsg, encoder=Base64Encoder)
-
-        assert Base64Encoder.decode(msg) == b"Hello World in base64"
-
-    def test_hex_smessage_with_detached_sig_matches_with_attached_sig(self):
-        sk = SigningKey.generate()
-        vk = sk.verify_key
-
-        smsg = sk.sign(b"Hello World in hex", encoder=HexEncoder)
-
-        msg = smsg.message
-        hexsig = smsg.signature
-
-        sig = HexEncoder.decode(hexsig)
-
-        assert vk.verify(msg, sig, encoder=HexEncoder) == \
-            vk.verify(smsg, encoder=HexEncoder)
-
-        assert HexEncoder.decode(msg) == b"Hello World in hex"
 
     def test_key_conversion(self):
         keypair_seed = (b"421151a459faeade3d247115f94aedae"
