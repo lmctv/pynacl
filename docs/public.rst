@@ -172,6 +172,11 @@ Reference
 
     :param bytes public_key: Encoded Curve25519 public key.
     :param encoder: A class that is able to decode the ``public_key``.
+    .. warning::
+
+       In the near future, we will start a deprecation cycle for all uses of
+       the `encoder` parameter, with the intent to remove it at a later time.
+
 
 .. class:: PrivateKey(private_key, encoder)
 
@@ -184,6 +189,10 @@ Reference
 
     :param bytes private_key: The private key used to decrypt messages.
     :param encoder: A class that is able to decode the ``private_key``.
+    .. warning::
+
+       In the near future, we will start a deprecation cycle for all uses of
+       the `encoder` parameter, with the intent to remove it at a later time.
 
     .. attribute:: public_key
 
@@ -218,6 +227,10 @@ Reference
         Decodes a serialized :class:`~nacl.public.Box`.
 
         :return: An instance of :class:`~nacl.public.Box`.
+        .. warning::
+
+           In the near future, we will start a deprecation cycle for all uses of
+           the `encoder` parameter, with the intent to remove it at a later time.
 
     .. method:: encrypt(plaintext, nonce, encoder)
 
@@ -233,6 +246,10 @@ Reference
         :param bytes plaintext: The plaintext message to encrypt.
         :param bytes nonce: The nonce to use in the encryption.
         :param encoder:  A class that is able to decode the ciphertext.
+        .. warning::
+
+           In the near future, we will start a deprecation cycle for all uses of
+           the `encoder` parameter, with the intent to remove it at a later time.
 
         :return: An instance of :class:`~nacl.utils.EncryptedMessage`.
 
@@ -245,6 +262,10 @@ Reference
         :param bytes ciphertext: The encrypted message to decrypt.
         :param bytes nonce: The nonce to use in the decryption.
         :param encoder: A class that is able to decode the plaintext.
+        .. warning::
+
+           In the near future, we will start a deprecation cycle for all uses of
+           the `encoder` parameter, with the intent to remove it at a later time.
 
         :return bytes: The decrypted plaintext.
 
@@ -279,6 +300,10 @@ Reference
 
         :param bytes plaintext: The plaintext message to encrypt.
         :param encoder:  A class that is able to decode the ciphertext.
+        .. warning::
+
+           In the near future, we will start a deprecation cycle for all uses of
+           the `encoder` parameter, with the intent to remove it at a later time.
 
         :return bytes: The public part of the ephemeral keypair,
                        followed by the encrypted ciphertext
@@ -290,6 +315,10 @@ Reference
 
         :param bytes ciphertext: The ciphertext message to decrypt.
         :param encoder:  A class that is able to decode the ciphertext.
+        .. warning::
+
+           In the near future, we will start a deprecation cycle for all uses of
+           the `encoder` parameter, with the intent to remove it at a later time.
 
         :return bytes: The decrypted message
 

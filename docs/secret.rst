@@ -147,6 +147,10 @@ Reference
 
     :param bytes key: The secret key used to encrypt and decrypt messages.
     :param encoder: A class that is able to decode the ``key``.
+    .. warning::
+
+       In the near future, we will start a deprecation cycle for all uses of
+       the `encoder` parameter, with the intent to remove it at a later time.
 
     .. method:: encrypt(plaintext, nonce, encoder)
 
@@ -163,6 +167,10 @@ Reference
         :param bytes plaintext: The plaintext message to encrypt.
         :param bytes nonce: The nonce to use in the encryption.
         :param encoder:  A class that is able to decode the ciphertext.
+        .. warning::
+
+           In the near future, we will start a deprecation cycle for all uses of
+           the `encoder` parameter, with the intent to remove it at a later time.
 
         :return: An instance of :class:`~nacl.utils.EncryptedMessage`.
 
@@ -175,6 +183,10 @@ Reference
         :param bytes ciphertext: The encrypted message to decrypt.
         :param bytes nonce: The nonce to use in the decryption.
         :param encoder: A class that is able to decode the plaintext.
+        .. warning::
+
+           In the near future, we will start a deprecation cycle for all uses of
+           the `encoder` parameter, with the intent to remove it at a later time.
 
         :return bytes: The decrypted plaintext.
 

@@ -195,6 +195,10 @@ Reference
 
     :param bytes seed: Random 32-byte value (i.e. private key).
     :param encoder: A class that is able to decode the ``seed``.
+    .. warning::
+
+       In the near future, we will start a deprecation cycle for all uses of
+       the `encoder` parameter, with the intent to remove it at a later time.
 
     .. attribute:: verify_key
 
@@ -213,6 +217,10 @@ Reference
 
         :param bytes message: The data to be signed.
         :param encoder: A class that is able to decode the signed message.
+        .. warning::
+
+           In the near future, we will start a deprecation cycle for all uses of
+           the `encoder` parameter, with the intent to remove it at a later time.
 
         :return: An instance of :class:`~nacl.signing.SignedMessage`.
 
@@ -223,6 +231,10 @@ Reference
 
     :param bytes key: A serialized Ed25519 public key.
     :param encoder: A class that is able to decode the ``key``.
+    .. warning::
+
+       In the near future, we will start a deprecation cycle for all uses of
+       the `encoder` parameter, with the intent to remove it at a later time.
 
     .. method:: verify(smessage, signature, encoder)
 
@@ -235,6 +247,10 @@ Reference
             this parameter can be ``None``.
         :param encoder: A class that is able to decode the secret message and
             signature.
+        .. warning::
+
+           In the near future, we will start a deprecation cycle for all uses of
+           the `encoder` parameter, with the intent to remove it at a later time.
 
         :return bytes: The message if successfully verified.
 
