@@ -57,6 +57,10 @@ class VerifyKey(encoding.Encodable, StringFixer, object):
 
     :param key: [:class:`bytes`] Serialized Ed25519 public key
     :param encoder: A class that is able to decode the `key`
+    .. warning::
+
+       In the near future, we will start a deprecation cycle for all uses of
+       the `encoder` parameter, with the intent to remove it at a later time.
     """
 
     def __init__(self, key, encoder=encoding.RawEncoder):
@@ -99,6 +103,12 @@ class VerifyKey(encoding.Encodable, StringFixer, object):
             smessage then the detached signature must be provided.
         :param encoder: A class that is able to decode the secret message and
             signature.
+        .. warning::
+
+           In the near future, we will start a deprecation cycle for
+           all uses of the `encoder` parameter, with the intent
+           to remove it at a later time.
+
         :rtype: :class:`bytes`
         """
         if signature is not None:
@@ -136,6 +146,10 @@ class SigningKey(encoding.Encodable, StringFixer, object):
 
     :param seed: [:class:`bytes`] Random 32-byte value (i.e. private key)
     :param encoder: A class that is able to decode the seed
+    .. warning::
+
+       In the near future, we will start a deprecation cycle for all uses of
+       the `encoder` parameter, with the intent to remove it at a later time.
 
     :ivar: verify_key: [:class:`~nacl.signing.VerifyKey`] The verify
         (i.e. public) key that corresponds with this signing key.
@@ -193,6 +207,12 @@ class SigningKey(encoding.Encodable, StringFixer, object):
 
         :param message: [:class:`bytes`] The data to be signed.
         :param encoder: A class that is used to encode the signed message.
+        .. warning::
+
+           In the near future, we will start a deprecation cycle for all
+           uses of the `encoder` parameter, with the intent to remove it
+           at a later time.
+
         :rtype: :class:`~nacl.signing.SignedMessage`
         """
         raw_signed = nacl.bindings.crypto_sign(message, self._signing_key)

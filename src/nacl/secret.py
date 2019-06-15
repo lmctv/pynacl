@@ -35,6 +35,10 @@ class SecretBox(encoding.Encodable, StringFixer, object):
 
     :param key: The secret key used to encrypt and decrypt messages
     :param encoder: The encoder class used to decode the given key
+    .. warning::
+
+       In the near future, we will start a deprecation cycle for all uses of
+       the `encoder` parameter, with the intent to remove it at a later time.
 
     :cvar KEY_SIZE: The size that the key is required to be.
     :cvar NONCE_SIZE: The size that the nonce is required to be.
@@ -68,8 +72,7 @@ class SecretBox(encoding.Encodable, StringFixer, object):
     def encrypt(self, plaintext, nonce=None, encoder=encoding.RawEncoder):
         """
         Encrypts the plaintext message using the given `nonce` (or generates
-        one randomly if omitted) and returns the ciphertext encoded with the
-        encoder.
+        one randomly if omitted) and returns the ciphertext.
 
         .. warning:: It is **VITALLY** important that the nonce is a nonce,
             i.e. it is a number used only once for any given key. If you fail
@@ -79,7 +82,13 @@ class SecretBox(encoding.Encodable, StringFixer, object):
 
         :param plaintext: [:class:`bytes`] The plaintext message to encrypt
         :param nonce: [:class:`bytes`] The nonce to use in the encryption
-        :param encoder: The encoder to use to encode the ciphertext
+        :param encoder: The encoder to use to encode the returned ciphertext
+        .. warning::
+
+           In the near future, we will start a deprecation cycle for
+           all uses of the `encoder` parameter, with the intent to remove
+           it at a later time.
+
         :rtype: [:class:`nacl.utils.EncryptedMessage`]
         """
         if nonce is None:
@@ -112,6 +121,12 @@ class SecretBox(encoding.Encodable, StringFixer, object):
         :param nonce: [:class:`bytes`] The nonce used when encrypting the
             ciphertext
         :param encoder: The encoder used to decode the ciphertext.
+        .. warning::
+
+           In the near future, we will start a deprecation cycle for all
+           uses of the `encoder` parameter, with the intent to remove it
+           at a later time.
+
         :rtype: [:class:`bytes`]
         """
         # Decode our ciphertext

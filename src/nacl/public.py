@@ -27,6 +27,10 @@ class PublicKey(encoding.Encodable, StringFixer, object):
 
     :param public_key: [:class:`bytes`] Encoded Curve25519 public key
     :param encoder: A class that is able to decode the `public_key`
+    .. warning::
+
+       In the near future, we will start a deprecation cycle for all uses of
+       the `encoder` parameter, with the intent to remove it at a later time.
 
     :cvar SIZE: The size that the public key is required to be
     """
@@ -71,6 +75,10 @@ class PrivateKey(encoding.Encodable, StringFixer, object):
 
     :param private_key: The private key used to decrypt messages
     :param encoder: The encoder class used to decode the given keys
+    .. warning::
+
+       In the near future, we will start a deprecation cycle for all uses of
+       the `encoder` parameter, with the intent to remove it at a later time.
 
     :cvar SIZE: The size that the private key is required to be
     :cvar SEED_SIZE: The size that the seed used to generate the
@@ -110,6 +118,12 @@ class PrivateKey(encoding.Encodable, StringFixer, object):
             the corresponding PrivateKey.
 
         :param seed: The seed used to generate the private key
+        .. warning::
+
+           In the near future, we will start a deprecation cycle for all
+           uses of the `encoder` parameter, with the intent to remove it
+           at a later time.
+
         :rtype: :class:`~nacl.public.PrivateKey`
         """
         # decode the seed
